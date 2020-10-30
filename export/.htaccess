@@ -1,0 +1,4 @@
+AuthType Basic
+AuthName "Passwortgeschützter Bereich"
+AuthUserFile /var/www/checkin.timeout-freiburg.de/html/export/.htpasswd
+Require valid-user

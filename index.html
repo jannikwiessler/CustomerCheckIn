@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <title>Timeout Freiburg Check-In</title>
+    <meta charset="UTF-8">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="mystylzz.css">
+</head>
+<body>
+<div class="secondlayer">
+    <div class="main-block">
+        <div class="align-center">
+            <img src="https://le-cdn.website-editor.net/238f4e528fb742ac817988bf89c8a157/dms3rep/multi/opt/logoTransparentNurKreis-715807bf-1920w.png"
+            id="logo"
+            alt="Timeout Freiburg"
+            />
+        </div>
+        <br/>
+        <h1>Check-In</h1>
+        <br/>
+
+        <form action="submit.php" method="post">
+            <hr/>
+            <!-- Name -->
+            <label class="icon" for="firstname"><i class="fas fa-user fa-lg"></i></label>
+            <input type="text" name="firstname" id="firstname" placeholder="Name" required/>
+
+            <br/>
+            <!-- Vorname -->
+            <label class="icon" for="lastname"></label>
+            <input type="text" name="lastname" id="lastname" placeholder="Nachname" required/>
+            <br/>
+            <!-- Straße -->
+            <label class="icon" for="street"><i class="fas fa-map-marker-alt fa-lg"></i></label>
+            <input type="text" name="street" id="street" placeholder="Straße und Hausnummer" required/>
+            <br/>
+            <!-- Plz -->
+            <label class="icon" for="zipcode"></label>
+            <input type="text" name="zipcode" id="zipcode" placeholder="Postleitzahl" required/>
+            <br/>
+            <!-- Stadt -->
+            <label class="icon" for="city"></label>
+            <input type="text" name="city" id="city" placeholder="Stadt" required/>
+            <br/>
+            <!-- EMail -->
+            <label class="icon" for="email"><i class="fas fa-envelope fa-lg"></i></label>
+            <input type="text" name="email" id="email" placeholder="Email" required/>
+            <br/>
+            <!-- Telefon -->
+            <label class="icon" for="tel"><i class="fas fa-mobile-alt fa-lg"></i></label>
+            <input type="text" name="tel" id="tel" placeholder="Mobile oder Festnetz" required/>
+            <br/>
+            <hr>
+            <br/>
+            <div class="btn-block">
+                <p>Um bei Bedarf eine l&uuml;ckenlose Kontaktnachverfolgung sicherstellen zu k&ouml;nnen, sind wir verpflichtet, die Kontaktdaten unserer G&auml;ste für 30 Tage zu speichern. Nach Ablauf von 30 Tagen werden die Kontaktdaten automatisch gel&ouml;scht.</p>
+                <button type="submit">Check-In</button>
+            </div>
+        </form>
+    </div>
+</div>
+</body>
+</html>
