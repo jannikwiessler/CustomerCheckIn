@@ -1,11 +1,13 @@
 html, body, .secondlayer {
     min-height: 100vh;
 }
+
 body {
     background-image: url("https://cdn.pixabay.com/photo/2016/03/05/19/02/hamburger-1238246_960_720.jpg");
     background-position: center;
     background-size: cover;
 }
+
 .secondlayer{
     /* background: rgba(254,234,211,0.95); */
     background: rgba(255, 255, 255, 0.95);
@@ -14,6 +16,7 @@ body {
     flex-direction: column;
     justify-content: center;
 }
+
 body, div, h1, form, input, p {
     padding: 0;
     margin: 0;
@@ -22,43 +25,52 @@ body, div, h1, form, input, p {
     font-size: 16px;
     color: #666;
 }
+
 h1 {
     padding: 10px 0;
     font-size: 28px;
     font-weight: 300;
     text-align: center;
+    color: rgba(105, 12, 10, 1);
 }
+
 p {
     font-size: 12px;
 }
+
 hr {
     color: #a9a9a9;
     opacity: 0.3;
 }
+
 .main-block {
     max-width: 90vw;
     padding: 2em 0;
     margin: 25px auto;
     border-radius: 5px;
     border: solid 1px #ccc;
-    box-shadow: 1px 2px 5px rgba(0,0,0,.31);
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, .31);
     background: white;
 }
+
 form {
     margin: 0 30px;
     text-align: center;
-    
 }
+
 .account-type, .gender {
     margin: 15px 0;
 }
+
 input[type=radio] {
     display: none;
 }
+
 label#icon {
     margin: 0;
     border-radius: 5px 0 0 5px;
 }
+
 label.radio {
     position: relative;
     display: inline-block;
@@ -68,6 +80,7 @@ label.radio {
     overflow: visible;
     cursor: pointer;
 }
+
 label.radio:before {
     content: "";
     position: absolute;
@@ -78,6 +91,7 @@ label.radio:before {
     border-radius: 50%;
     background: #1c87c9;
 }
+
 label.radio:after {
     content: "";
     position: absolute;
@@ -91,9 +105,11 @@ label.radio:after {
     transform: rotate(-45deg);
     opacity: 0;
 }
+
 input[type=radio]:checked + label:after {
     opacity: 1;
 }
+
 input[type=text], input[type=password] {
     width: calc(70%);
     height: 36px;
@@ -101,60 +117,70 @@ input[type=text], input[type=password] {
     padding: 30px;
     border-radius: 0 5px 5px 0;
     border: solid 1px #cbc9c9;
-    box-shadow: 1px 2px 5px rgba(0,0,0,.09);
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, .09);
     background: #fff;
 }
+
 input[type=password] {
     margin-bottom: 15px;
 }
+
 .icon {
     display: inline-block;
     padding: 9.3px 15px;
-    box-shadow: 1px 2px 5px rgba(0,0,0,0);
+    box-shadow: 1px 2px 5px rgba(0, 0, 0, 0);
     background: #fff;
     width: 1.5em;
-    color: rgba(105,12,10,1);
+    color: rgba(105, 12, 10, 1);
     text-align: center;
 }
+
 .btn-block {
     margin-top: 10px;
     text-align: center;
 }
+
 button {
     width: 100%;
     padding: 18px 0;
     margin: 10px auto;
     border-radius: 5px;
     border: none;
-    background: rgba(105,12,10,1);
+    background: rgba(105, 12, 10, 1);
     font-size: 14px;
     font-weight: 600;
     color: #fff;
 }
-#logo{
+
+#logo {
     margin: auto;
 }
-.align-center{
+
+.align-center {
     text-align: center;
     width: 100%;
 }
+
 button:hover {
-    background: rgba(253,138,6,1);
+    background: rgba(253, 138, 6, 1);
 }
-@media (pointer:coarse) {
+
+@media (pointer: coarse) {
     body, div, form, input {
         font-size: 1.2em;
-        
+
     }
+
     h1 {
         font-size: 1.4em;
         font-weight: bold;
-        color: rgba(105,12,10,1);
     }
+
     p {
         font-size: 0.7em;
     }
-    button{
+
+    button {
         font-size: 1em;
     }
 

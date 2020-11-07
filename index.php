@@ -1,20 +1,58 @@
+<?php
+try {
+    include('config.php');
+
+    $domain = $_SERVER['SERVER_NAME'];
+
+    $connection = new mysqli($mysqlServer, $mysqlUser, $mysqlPassword, $mysqlDatabase);
+    try{
+        $statement = $connection->stmt_init();
+        try {
+            if (!$statement->prepare('SELECT restaurant_name, logo_url FROM restaurants WHERE domain = ?;')) {
+                throw new Exception($statement->error);
+            }
+
+            $statement->bind_param('s', $domain);
+            $statement->execute();
+
+            if ($statement->errno) {
+                throw new Exception($statement->error);
+            }
+
+            if ($statement->num_rows == 0) {
+                header('Location: https://online-checkin-freiburg.de/registration.php?domain=' . urlencode($domain));
+                throw new Exception($statement->error);
+            }
+
+            $statement->bind_result($restaurantName, $logoUrl);
+            $statement->fetch();
+        } finally {
+            $statement->close();
+        }
+    } finally {
+        $connection->close();
+    }
+} catch (Exception $ex){
+    echo $ex->getMessage();
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <title>Timeout Freiburg Check-In</title>
+    <title><?= $restaurantName ?></title>
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
+          integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <link rel="stylesheet" href="mystylzz.css">
+    <link rel="stylesheet" href="restaurant-styles.php">
 </head>
 <body>
 <div class="secondlayer">
     <div class="main-block">
         <div class="align-center">
-            <img src="https://le-cdn.website-editor.net/238f4e528fb742ac817988bf89c8a157/dms3rep/multi/opt/logoTransparentNurKreis-715807bf-1920w.png"
-            id="logo"
-            alt="Timeout Freiburg"
-            />
+            <img src="<?= $logoUrl ?>" id="logo" alt="<?= $restaurantName ?>"/>
         </div>
         <br/>
         <h1>Check-In</h1>
@@ -54,7 +92,9 @@
             <hr>
             <br/>
             <div class="btn-block">
-                <p>Um bei Bedarf eine l&uuml;ckenlose Kontaktnachverfolgung sicherstellen zu k&ouml;nnen, sind wir verpflichtet, die Kontaktdaten unserer G&auml;ste für 30 Tage zu speichern. Nach Ablauf von 30 Tagen werden die Kontaktdaten automatisch gel&ouml;scht.</p>
+                <p>Um bei Bedarf eine l&uuml;ckenlose Kontaktnachverfolgung sicherstellen zu k&ouml;nnen, sind wir
+                    verpflichtet, die Kontaktdaten unserer G&auml;ste für 30 Tage zu speichern. Nach Ablauf von 30 Tagen
+                    werden die Kontaktdaten automatisch gel&ouml;scht.</p>
                 <button type="submit">Check-In</button>
             </div>
         </form>

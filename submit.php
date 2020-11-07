@@ -1,47 +1,85 @@
 <?php
 
-if ( $_SERVER['REQUEST_METHOD'] != 'POST' ) {
-    header('Location: index.html');
-} else{
-    include('config.php');
-
-    $connection = new mysqli($mysqlServer, $mysqlUser, $mysqlPassword, $mysqlDatabase);
-
-    $statement = $connection->stmt_init();
-
-    if($statement->prepare('SELECT id FROM customers WHERE id=?;')){
-        do {
-            if(function_exists('random_int')){
-                $id = random_int(10**10, PHP_INT_MAX);
-            } else {
-                $id = mt_rand(10**10, PHP_INT_MAX);
-            }
-            $statement->bind_param('i', $id);
-
-            $statement->execute();
-        } while ($statement->num_rows > 0);
-
-        $statement->close();
-    }
-
-    $statement = $connection->stmt_init();
-
-    if($statement->prepare('INSERT INTO customers (id, first_name,last_name,email,tel,address,zip_code,city,checkin_time) VALUES (?,?,?,?,?,?,?,?,NOW());')){
-        $statement->bind_param('isssssss', $id, $_POST['firstname'], $_POST['lastname'], $_POST['email'], $_POST['tel'], $_POST['street'], $_POST['zipcode'], $_POST['city']);
-
-        $statement->execute();
-
-        if($statement->errno){
-            echo $statement->error;
-        } else {
-            header('Location: checkout.php?id='.$id);
-        }
-
-        $statement->close();
-    }
-
-    $connection->close();
-
+if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+    header('Location: index.php');
+    exit();
 }
 
+try {
+    include('config.php');
+
+    $domain = $_SERVER['SERVER_NAME'];
+
+    $connection = new mysqli($mysqlServer, $mysqlUser, $mysqlPassword, $mysqlDatabase);
+    try {
+        $statement = $connection->stmt_init();
+        try {
+            if (!$statement->prepare('SELECT id, restaurant_name, logo_url FROM restaurants WHERE domain = ?;')) {
+                throw new Exception($statement->error);
+            }
+
+            $statement->bind_param('s', $domain);
+            $statement->execute();
+
+            if ($statement->errno) {
+                throw new Exception($statement->error);
+            }
+
+            if ($statement->num_rows == 0) {
+                header('Location: https://online-checkin-freiburg.de/registration.php?domain=' . urlencode($domain));
+                throw new Exception($statement->error);
+            }
+
+            $statement->bind_result($restaurantId, $restaurantName, $logoUrl);
+            $statement->fetch();
+        } finally {
+            $statement->close();
+        }
+
+        include('config.php');
+
+        $connection = new mysqli($mysqlServer, $mysqlUser, $mysqlPassword, $mysqlDatabase);
+
+        $statement = $connection->stmt_init();
+        try {
+            if ($statement->prepare('SELECT id FROM customers WHERE id=?;')) {
+                do {
+                    if (function_exists('random_int')) {
+                        $id = random_int(10 ** 10, PHP_INT_MAX);
+                    } else {
+                        $id = mt_rand(10 ** 10, PHP_INT_MAX);
+                    }
+                    $statement->bind_param('i', $id);
+
+                    $statement->execute();
+                } while ($statement->num_rows > 0);
+            }
+        } finally {
+            $statement->close();
+        }
+
+        $statement = $connection->stmt_init();
+        try {
+            if ($statement->prepare('INSERT INTO customers (id, restaurant_id, first_name,last_name,email,tel,address,zip_code,city,checkin_time) VALUES (?,?,?,?,?,?,?,?,?,NOW());')) {
+                $statement->bind_param('iisssssss', $id, $restaurantId, $_POST['firstname'], $_POST['lastname'], $_POST['email'], $_POST['tel'], $_POST['street'], $_POST['zipcode'], $_POST['city']);
+
+                $statement->execute();
+
+                if ($statement->errno) {
+                    echo $statement->error;
+                } else {
+                    header('Location: checkout.php?id=' . $id);
+                }
+
+            }
+        } finally {
+            $statement->close();
+        }
+    } finally {
+        $connection->close();
+    }
+} catch (Exception $ex) {
+    echo $ex->getMessage();
+    exit();
+}
 
