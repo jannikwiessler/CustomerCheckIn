@@ -22,7 +22,7 @@ try {
             $statement->store_result();
 
             if ($statement->num_rows == 0) {
-                header('Location: https://mirathra.de/registration/?domain=' . urlencode($domain));
+                header('Location: https://mirathra.de/admin/registration/?domain=' . urlencode($domain));
                 throw new Exception("Domain nicht vorhanden.");
             }
 

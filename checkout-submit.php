@@ -12,7 +12,7 @@ try {
     try {
         $statement = $connection->stmt_init();
         try {
-            if (!$statement->prepare('SELECT restaurant_name, logo_url FROM restaurants WHERE domain = ?;')) {
+            if (!$statement->prepare('SELECT restaurant_name, logo_url, website FROM restaurants WHERE domain = ?;')) {
                 throw new Exception($statement->error);
             }
 
@@ -26,11 +26,11 @@ try {
             $statement->store_result();
 
             if ($statement->num_rows == 0) {
-                header('Location: https://online-checkin-freiburg.de/registration.php?domain=' . urlencode($domain));
+                header('Location: https://online-checkin-freiburg.de/admin/registration.php?domain=' . urlencode($domain));
                 throw new Exception($statement->error);
             }
 
-            $statement->bind_result($restaurantName, $logoUrl);
+            $statement->bind_result($restaurantName, $logoUrl, $website);
             $statement->fetch();
         } finally {
             $statement->close();
@@ -59,7 +59,7 @@ try {
     exit();
 }
 
-header("refresh:4;http://timeout-freiburg.de");  //10 sind die sek
+header("refresh:4;" . $website);  //4 sind die sek
 ?>
 
 <!DOCTYPE html>
@@ -82,7 +82,8 @@ header("refresh:4;http://timeout-freiburg.de");  //10 sind die sek
         </div>
         <br/>
         <h1>Check-Out</h1>
-        <br/>
+
+        <hr/>
 
         <form action="checkout-submit.php" method="post">
             <div class="btn-block">

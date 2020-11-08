@@ -2,7 +2,7 @@
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         session_start();
-        include('../config.php');
+        include('../../config.php');
 
         $connection = new mysqli($mysqlServer, $mysqlUser, $mysqlPassword, $mysqlDatabase);
         try {
@@ -49,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         throw new Exception($statement->error);
                     } else {
                         $_SESSION['restaurantId'] = $statement->insert_id;
-                        header('Location: /logedin/index.php');
+                        header('Location: /admin/logedin/');
                     }
                 } finally {
                     $statement->close();
@@ -74,7 +74,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
           integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <link rel="stylesheet" href="administration.css">
+    <link rel="stylesheet" href="../administration.css">
 
 </head>
 

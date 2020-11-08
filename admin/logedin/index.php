@@ -1,10 +1,10 @@
 <?php
 session_start();
-include('../config.php');
+include('../../config.php');
 
 try {
     if (!isset($_SESSION['restaurantId'])) {
-        header('Location: /registration/');
+        header('Location: /admin/registration/');
         exit;
     }
 
@@ -47,7 +47,7 @@ try {
             $statement->store_result();
 
             if ($statement->num_rows == 0) {
-                header('Location: https://mirathra.de/registration/');
+                header('Location: /admin/login.php');
             }
 
             $statement->bind_result($domain, $logoUrl, $titleColor, $iconColor, $buttonColor);
@@ -70,7 +70,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <title>Title of the document</title>
-    <link rel="stylesheet" href="../registration/administration.css">
+    <link rel="stylesheet" href="../administration.css">
     <style>
         #wrap {
             width: 100%;
@@ -105,8 +105,15 @@ try {
 <body>
 <div class="testbox">
     <form action="index.php" method="post">
+        <nav>
+            <ul>
+                <li><a href="index.php">Design</a></li>
+                <li><a href="export.php">Export</a></li>
+                <li><a href="logout.php">Logout</a></li>
+            </ul>
+        </nav>
         <div class="banner">
-            <h1>Volunteer Signup</h1>
+            <h1>Design</h1>
         </div>
         <br/>
         <p>The HELP Group is seeking volunteers to serve our community. Fill in the information below to indicate
@@ -116,7 +123,7 @@ try {
         <div class="colums">
             <div class="wrap">
                 <div style="margin: auto; width: 80%">
-                    <iframe src="../index.php?domain=<?= urlencode($domain) ?>" id="scaled-frame" name="quicklook">
+                    <iframe src="../../index.php?domain=<?= urlencode($domain) ?>" id="scaled-frame" name="quicklook">
                         <p>Ihr Browser kann leider keine eingebetteten Frames anzeigen.</p>
                     </iframe>
                 </div>

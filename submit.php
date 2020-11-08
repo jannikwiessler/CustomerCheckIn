@@ -28,8 +28,8 @@ try {
             $statement->store_result();
 
             if ($statement->num_rows == 0) {
-                header('Location: https://online-checkin-freiburg.de/registration.php?domain=' . urlencode($domain));
-                throw new Exception($statement->error);
+                header('Location: https://mirathra.de/admin/registration/?domain=' . urlencode($domain));
+                throw new Exception("Domain nicht vorhanden.");
             }
 
             $statement->bind_result($restaurantId, $restaurantName, $logoUrl);

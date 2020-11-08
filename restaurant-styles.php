@@ -19,11 +19,11 @@ try {
                 throw new Exception($statement->error);
             }
 
-                      $statement->store_result();
+            $statement->store_result();
 
-      if ($statement->num_rows == 0) {
-                header('Location: https://online-checkin-freiburg.de/registration/?domain=' . urlencode($domain));
-                throw new Exception($statement->error);
+            if ($statement->num_rows == 0) {
+                header('Location: https://mirathra.de/admin/registration/?domain=' . urlencode($domain));
+                throw new Exception("Domain nicht vorhanden.");
             }
 
             $statement->bind_result($titleColor, $iconColor, $buttonColor);
