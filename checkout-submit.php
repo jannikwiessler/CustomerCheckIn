@@ -23,6 +23,8 @@ try {
                 throw new Exception($statement->error);
             }
 
+            $statement->store_result();
+
             if ($statement->num_rows == 0) {
                 header('Location: https://online-checkin-freiburg.de/registration.php?domain=' . urlencode($domain));
                 throw new Exception($statement->error);

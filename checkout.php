@@ -13,7 +13,7 @@
         try{
             $statement = $connection->stmt_init();
             try {
-                if (!$statement->prepare('SELECT restaurant_name, logo_url FROM restaurants WHERE domain = ?;')) {
+                if (!$statement->prepare('SELECT restaurant_name, logo_url FROM restaurants WHERE `domain` = ?;')) {
                     throw new Exception($statement->error);
                 }
 
@@ -23,6 +23,8 @@
                 if ($statement->errno) {
                     throw new Exception($statement->error);
                 }
+
+                $statement->store_result();
 
                 if ($statement->num_rows == 0) {
                     header('Location: https://online-checkin-freiburg.de/registration.php?domain=' . urlencode($domain));
@@ -37,20 +39,20 @@
 
             $statement = $connection->stmt_init();
             try{
-                if($statement->prepare('SELECT first_name FROM customers WHERE id=?;')){
-                    $statement->bind_param('i', $_GET['id']);
+                if (!$statement->prepare('SELECT first_name FROM customers WHERE id=?;')) {
+                    throw new Exception($statement->error);
+                }
+                $statement->bind_param('i', $_GET['id']);
 
-                    $statement->execute();
+                $statement->execute();
 
-                    if ($statement->errno) {
-                        throw new Exception($statement->error);
-                    }
-
-                    $statement->bind_result($firstName);
-
-                    $statement->fetch();
+                if ($statement->errno) {
+                    throw new Exception($statement->error);
                 }
 
+                $statement->bind_result($firstName);
+
+                $statement->fetch();
             } finally {
                 $statement->close();
             }

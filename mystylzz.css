@@ -2,15 +2,8 @@ html, body, .secondlayer {
     min-height: 100vh;
 }
 
-body {
-    background-image: url("https://cdn.pixabay.com/photo/2016/03/05/19/02/hamburger-1238246_960_720.jpg");
-    background-position: center;
-    background-size: cover;
-}
-
 .secondlayer{
-    /* background: rgba(254,234,211,0.95); */
-    background: rgba(255, 255, 255, 0.95);
+    background: white;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -22,31 +15,23 @@ body, div, h1, form, input, p {
     margin: 0;
     outline: none;
     font-family: Roboto, Arial, sans-serif;
-    font-size: 16px;
     color: #666;
 }
 
 h1 {
-    padding: 10px 0;
-    font-size: 28px;
     font-weight: 300;
     text-align: center;
     color: rgba(105, 12, 10, 1);
 }
 
-p {
-    font-size: 12px;
-}
-
 hr {
     color: #a9a9a9;
     opacity: 0.3;
+    margin: 1em 0;
 }
 
 .main-block {
     max-width: 90vw;
-    padding: 2em 0;
-    margin: 25px auto;
     border-radius: 5px;
     border: solid 1px #ccc;
     box-shadow: 1px 2px 5px rgba(0, 0, 0, .31);
@@ -54,12 +39,7 @@ hr {
 }
 
 form {
-    margin: 0 30px;
     text-align: center;
-}
-
-.account-type, .gender {
-    margin: 15px 0;
 }
 
 input[type=radio] {
@@ -71,89 +51,37 @@ label#icon {
     border-radius: 5px 0 0 5px;
 }
 
-label.radio {
-    position: relative;
-    display: inline-block;
-    padding-top: 4px;
-    margin-right: 20px;
-    text-indent: 30px;
-    overflow: visible;
-    cursor: pointer;
-}
-
-label.radio:before {
-    content: "";
-    position: absolute;
-    top: 2px;
-    left: 0;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    background: #1c87c9;
-}
-
-label.radio:after {
-    content: "";
-    position: absolute;
-    width: 9px;
-    height: 4px;
-    top: 8px;
-    left: 4px;
-    border: 3px solid #fff;
-    border-top: none;
-    border-right: none;
-    transform: rotate(-45deg);
-    opacity: 0;
-}
-
-input[type=radio]:checked + label:after {
-    opacity: 1;
-}
-
 input[type=text], input[type=password] {
-    width: calc(70%);
-    height: 36px;
-    margin: 35px 0 0 20px;
-    padding: 30px;
     border-radius: 0 5px 5px 0;
     border: solid 1px #cbc9c9;
     box-shadow: 1px 2px 5px rgba(0, 0, 0, .09);
     background: #fff;
 }
 
-input[type=password] {
-    margin-bottom: 15px;
-}
-
 .icon {
     display: inline-block;
-    padding: 9.3px 15px;
     box-shadow: 1px 2px 5px rgba(0, 0, 0, 0);
     background: #fff;
-    width: 1.5em;
     color: rgba(105, 12, 10, 1);
     text-align: center;
 }
 
 .btn-block {
-    margin-top: 10px;
     text-align: center;
 }
 
 button {
     width: 100%;
-    padding: 18px 0;
-    margin: 10px auto;
     border-radius: 5px;
     border: none;
     background: rgba(105, 12, 10, 1);
-    font-size: 14px;
     font-weight: 600;
     color: #fff;
 }
 
 #logo {
     margin: auto;
+    height: 9em;
 }
 
 .align-center {
@@ -168,20 +96,101 @@ button:hover {
 @media (pointer: coarse) {
     body, div, form, input {
         font-size: 1.2em;
-
     }
 
     h1 {
+        padding: 10px 0;
         font-size: 1.4em;
         font-weight: bold;
     }
 
     p {
-        font-size: 0.7em;
+        font-size: 0.9em;
+    }
+
+    .main-block {
+        max-width: 90vw;
+        padding: 2em 0;
+        margin: 25px auto;
+        border-radius: 5px;
+    }
+
+    form {
+        margin: 0 30px;
+    }
+
+    .account-type, .gender {
+        margin: 15px 0;
+    }
+
+    input[type=text], input[type=password] {
+        width: 70%;
+        height: 36px;
+        margin: 35px 0 0 20px;
+        padding: 30px;
+    }
+
+    .icon {
+        padding: 9.3px 15px;
+        width: 1.5em;
     }
 
     button {
+        padding: 18px 0;
+        margin: 10px auto;
+        font-size: 1em;
+    }
+}
+
+@media (pointer: fine) {
+    body, div, form, input {
         font-size: 1em;
     }
 
+    h1 {
+        padding: 10px 0;
+        font-size: 1.2em;
+        font-weight: bold;
+    }
+
+    p {
+        font-size: 1em;
+    }
+
+    .main-block {
+        max-width: 90vw;
+        padding: 2em 0;
+        margin: 25px auto;
+        border-radius: 5px;
+    }
+
+    form {
+        margin: 0 30px;
+    }
+
+    .account-type, .gender {
+        margin: 15px 0;
+    }
+
+    input[type=text], input[type=password] {
+        width: 70%;
+        height: 20px;
+        margin: 20px 0 0 20px;
+        padding: 20px;
+    }
+
+    .icon {
+        padding: 9.3px 15px;
+        width: 1.5em;
+    }
+
+    .btn-block {
+        margin-top: 10px;
+    }
+
+    button {
+        padding: 18px 0;
+        margin: 10px auto;
+        font-size: 1em;
+    }
 }

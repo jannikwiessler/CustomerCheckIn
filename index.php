@@ -2,13 +2,13 @@
 try {
     include('config.php');
 
-    $domain = $_SERVER['SERVER_NAME'];
+    $domain = isset($_GET['domain']) ? $_GET['domain'] : $_SERVER['SERVER_NAME'];
 
     $connection = new mysqli($mysqlServer, $mysqlUser, $mysqlPassword, $mysqlDatabase);
     try{
         $statement = $connection->stmt_init();
         try {
-            if (!$statement->prepare('SELECT restaurant_name, logo_url FROM restaurants WHERE domain = ?;')) {
+            if (!$statement->prepare('SELECT restaurant_name, logo_url FROM restaurants WHERE `domain` = ?;')) {
                 throw new Exception($statement->error);
             }
 
@@ -19,9 +19,11 @@ try {
                 throw new Exception($statement->error);
             }
 
+            $statement->store_result();
+
             if ($statement->num_rows == 0) {
-                header('Location: https://online-checkin-freiburg.de/registration.php?domain=' . urlencode($domain));
-                throw new Exception($statement->error);
+                header('Location: https://mirathra.de/registration/?domain=' . urlencode($domain));
+                throw new Exception("Domain nicht vorhanden.");
             }
 
             $statement->bind_result($restaurantName, $logoUrl);
@@ -46,7 +48,8 @@ try {
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
           integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <link rel="stylesheet" href="mystylzz.css">
-    <link rel="stylesheet" href="restaurant-styles.php">
+    <link rel="stylesheet"
+          href="restaurant-styles.php<?= isset($_GET['domain']) ? '?domain=' . $_GET['domain'] : '' ?>">
 </head>
 <body>
 <div class="secondlayer">
@@ -56,10 +59,10 @@ try {
         </div>
         <br/>
         <h1>Check-In</h1>
-        <br/>
 
         <form action="submit.php" method="post">
             <hr/>
+
             <!-- Name -->
             <label class="icon" for="firstname"><i class="fas fa-user fa-lg"></i></label>
             <input type="text" name="firstname" id="firstname" placeholder="Name" required/>
@@ -88,9 +91,9 @@ try {
             <!-- Telefon -->
             <label class="icon" for="tel"><i class="fas fa-mobile-alt fa-lg"></i></label>
             <input type="text" name="tel" id="tel" placeholder="Mobile oder Festnetz" required/>
-            <br/>
+
             <hr>
-            <br/>
+
             <div class="btn-block">
                 <p>Um bei Bedarf eine l&uuml;ckenlose Kontaktnachverfolgung sicherstellen zu k&ouml;nnen, sind wir
                     verpflichtet, die Kontaktdaten unserer G&auml;ste für 30 Tage zu speichern. Nach Ablauf von 30 Tagen

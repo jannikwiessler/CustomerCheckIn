@@ -2,13 +2,13 @@
 try {
     include('config.php');
 
-    $domain = $_SERVER['SERVER_NAME'];
+    $domain = isset($_GET['domain']) ? $_GET['domain'] : $_SERVER['SERVER_NAME'];
 
     $connection = new mysqli($mysqlServer, $mysqlUser, $mysqlPassword, $mysqlDatabase);
     try{
         $statement = $connection->stmt_init();
         try {
-            if (!$statement->prepare('SELECT background_color, highlight_color FROM restaurants WHERE domain = ?;')) {
+            if (!$statement->prepare('SELECT title_color, icon_color, button_color FROM restaurants WHERE `domain` = ?;')) {
                 throw new Exception($statement->error);
             }
 
@@ -19,12 +19,14 @@ try {
                 throw new Exception($statement->error);
             }
 
-            if ($statement->num_rows == 0) {
-                header('Location: https://online-checkin-freiburg.de/register.php?domain=' . urlencode($domain));
+                      $statement->store_result();
+
+      if ($statement->num_rows == 0) {
+                header('Location: https://online-checkin-freiburg.de/registration/?domain=' . urlencode($domain));
                 throw new Exception($statement->error);
             }
 
-            $statement->bind_result($backgroundColor, $formBackgroundColor, $textColor, $highlightColor);
+            $statement->bind_result($titleColor, $iconColor, $buttonColor);
             $statement->fetch();
         } finally {
             $statement->close();
@@ -40,34 +42,16 @@ try {
 header('Content-Type: text/css');
 ?>
 
-body {
-    background-image: url("https://cdn.pixabay.com/photo/2016/03/05/19/02/hamburger-1238246_960_720.jpg");
-}
-
-.secondlayer {
-    background-color: <?=$backgroundColor?>;
-}
-
 h1 {
-    color: <?=$highlightColor?>;
-}
-
-label.radio:before {
-    background: #1c87c9;
-}
-
-input[type=text], input[type=password] {
-    border: solid 1px #cbc9c9;
-    box-shadow: 1px 2px 5px rgba(0, 0, 0, .09);
-    background: #fff;
+    color: <?=$titleColor?>;
 }
 
 .icon {
-    color: <?=$highlightColor?>;
+    color: <?=$iconColor?>;
 }
 
 button {
-    background: <?=$highlightColor?>;
+    background: <?=$buttonColor?>;
     color: #fff;
 }
 
