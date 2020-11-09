@@ -6,11 +6,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $connection = new mysqli($mysqlServer, $mysqlUser, $mysqlPassword, $mysqlDatabase);
         try {
-            if ($_POST['info'] == '1') {
-                $domain = $_POST['domain'];
-            } else {
+            /*            if ($_POST['info'] == '1') {
+                            $domain = $_POST['domain'];
+                        } else {*/
                 $domain = $_POST['subdomain'] . '.' . $_SERVER['SERVER_NAME'];
-            }
+//            }
+
+            $errors = [];
 
             $statement = $connection->stmt_init();
             try {
@@ -28,20 +30,69 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $statement->store_result();
 
                 if ($statement->num_rows > 0) {
-                    $domainError = "Die Domain ist bereits registriert.";
+                    $errors['domain'] = "Die Domain ist bereits registriert.";
                 }
             } finally {
                 $statement->close();
             }
 
-            if (!isset($domainError)) {
+            $statement = $connection->stmt_init();
+            try {
+                if (!$statement->prepare('SELECT id FROM restaurants WHERE `email` = ?;')) {
+                    throw new Exception($statement->error);
+                }
+
+                $statement->bind_param('s', $_POST['email']);
+                $statement->execute();
+
+                if ($statement->errno) {
+                    throw new Exception($statement->error);
+                }
+
+                $statement->store_result();
+
+                if ($statement->num_rows > 0) {
+                    $errors['email'] = "Ein Account mit dieser E-Mail-Adresse existiert bereits.";
+                }
+            } finally {
+                $statement->close();
+            }
+
+            $password = $_POST['password'];
+            if ($password != $_POST['password2']) {
+                $errors['password'] = "Die Passwörter sind nicht gleich.";
+            } else {
+                $passwordStrength = 0;
+                if (preg_match("#[0-9]+#", $password)) {
+                    $passwordStrength++;
+                }
+
+                if (preg_match("#[a-z]+#", $password)) {
+                    $passwordStrength++;
+                }
+
+                if (preg_match("#[A-Z]+#", $password)) {
+                    $passwordStrength++;
+                }
+
+                if (preg_match("#\W+#", $password)) {
+                    $passwordStrength++;
+                }
+
+                if (strlen($password) < 8 || $passwordStrength < 3) {
+                    $errors['password'] = "Das Passwort muss mindestens 8 Zeichen lang sein und 3 der folgenden Zeichenarten enthalten: Kleinbuchstaben, Großbuchstaben, Zahlen und Zeichen";
+                }
+            }
+            if (sizeof($errors) == 0) {
                 $statement = $connection->stmt_init();
                 try {
-                    if (!$statement->prepare('INSERT INTO restaurants (domain,first_name,last_name,restaurant_name,email,tel,address,zip_code,city,website) VALUES (?,?,?,?,?,?,?,?,?,?);')) {
+                    if (!$statement->prepare('INSERT INTO restaurants (domain,first_name,last_name,restaurant_name,email,password,tel,address,zip_code,city,website) VALUES (?,?,?,?,?,?,?,?,?,?,?);')) {
                         throw new Exception($statement->error);
                     }
 
-                    $statement->bind_param('ssssssssss', $domain, $_POST['firstname'], $_POST['lastname'], $_POST['restaurantname'], $_POST['email'], $_POST['phone'], $_POST['street'], $_POST['zip'], $_POST['city'], $_POST['website']);
+                    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
+
+                    $statement->bind_param('sssssssssss', $domain, $_POST['firstname'], $_POST['lastname'], $_POST['restaurantname'], $_POST['email'], $hashedPassword, $_POST['phone'], $_POST['street'], $_POST['zip'], $_POST['city'], $_POST['website']);
 
                     $statement->execute();
 
@@ -67,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="de">
 
 <head>
     <title>Online-Check-In registrieren</title>
@@ -81,6 +132,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
 <div class="testbox">
     <form action="index.php" method="post">
+        <nav>
+            <ul>
+                <li><a href="/admin/registration/">Registrieren</a></li>
+                <li><a href="/admin/login.php">Login</a></li>
+            </ul>
+        </nav>
         <div class="banner">
             <h1>Online-Check-In registrieren</h1>
         </div>
@@ -107,7 +164,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="item">
                 <label for="email">Email-Adresse (Username)<span>*</span></label>
                 <input id="email" type="text" name="email" value="<?= $_POST['email'] ?>" required/>
+                <?php
+                if (isset($errors['email'])) {
+                    echo '<p style="color:red;">' . $errors['email'] . '</p>';
+                }
+                ?>
             </div>
+            <div class="item">
+                <label for="password">Passwort<span>*</span></label>
+                <input id="password" type="password" name="password" required/>
+            </div>
+            <div class="item">
+                <label for="password2">Passwort wiederholen<span>*</span></label>
+                <input id="password2" type="password" name="password2" required/>
+            </div>
+            <?php
+            if (isset($errors['password'])) {
+                echo '<p style="color:red;flex-grow:2;width:100%">' . $errors['password'] . '</p>';
+            }
+            ?>
             <div class="item">
                 <label for="phone">Telefon</label>
                 <input id="phone" type="tel" name="phone" value="<?= $_POST['phone'] ?>"/>
@@ -128,19 +203,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <label for="website">Website<span></span></label>
                 <input id="website" type="text" name="website" value="<?= $_POST['website'] ?>"/>
             </div>
+            <div class="item">
+                <label for="subdomain">Wunsch Domain</label>
+                <div style="display: flex;width:100%;align-items: center;">
+                    <input id="subdomain" type="text" name="subdomain" value="<?= $_POST['subdomain'] ?>"
+                           placeholder="my-restaurant-name" style="flex-grow: 2;"/>
+                    <span>.<?= $_SERVER['SERVER_NAME'] ?></span>
+                </div>
+
+                <?php
+                if (isset($errors['domain'])) {
+                    echo '<p style="color: red;">' . $errors['domain'] . '</p>';
+                }
+                ?>
+            </div>
         </div>
-        <div class="question">
+        <!--        <div class="question">
             <label>Ich habe eine eigene Domain.</label>
             <div class="question-answer">
                 <div>
                     <input type="radio" value="1" id="radio_1"
-                           name="info" <?= $_POST['info'] == 1 ? 'checked="checked"' : '' ?>
+                           name="info" <? /*= $_POST['info'] == 1 ? 'checked="checked"' : '' */ ?>
                            onchange="domainCheckBoxChanged(this)"/>
                     <label for="radio_1" class="radio"><span>Ja</span></label>
                 </div>
                 <div>
                     <input type="radio" value="2" id="radio_2"
-                           name="info" <?= $_POST['info'] == 2 ? 'checked="checked"' : '' ?>
+                           name="info" <? /*= $_POST['info'] == 2 ? 'checked="checked"' : '' */ ?>
                            onchange="domainCheckBoxChanged(this)"
                            checked="checked" />
                     <label for="radio_2" class="radio"><span>Nein</span></label>
@@ -148,21 +237,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             </div>
             <div class="item">
                 <label for="domain">Domain</label>
-                <input id="domain" type="text" name="domain" value="<?= $_POST['domain'] ?>"
+                <input id="domain" type="text" name="domain" value="<? /*= $_POST['domain'] */ ?>"
                        placeholder="checkin.my-restaurant-name.de"
                        disabled="disabled" />
             </div>
-            <div class="item">
+           <div class="item">
                 <label for="subdomain">Wunsch Domain</label>
                 <input id="subdomain" type="text" name="subdomain" value="<?= $_POST['subdomain'] ?>"
                        placeholder="my-restaurant-name"/>.checkin.de
             </div>
             <?php
-            if (isset($domainError)) {
-                echo '<p style="color: red;">' . $domainError . '</p>';
+        if (isset($errors['domain'])) {
+            echo '<p style="color: red;">' . $errors['domain'] . '</p>';
             }
             ?>
-        </div>
+        </div>-->
 
         <!-- <div class="item">
       <p>Meal Preference</p>

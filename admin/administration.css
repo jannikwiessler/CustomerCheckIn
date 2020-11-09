@@ -106,13 +106,14 @@ form {
 
 input,
 select,
-textarea {
-    margin-bottom: 10px;
+textarea,
+.input {
     border: 1px solid #ccc;
     border-radius: 3px;
 }
 
-input {
+input,
+.input {
     width: calc(100% - 10px);
     padding: 5px;
 }
@@ -127,7 +128,7 @@ textarea {
 }
 
 .item:hover p,
-.item:hover i,
+.item:hover .icon,
 .question:hover p,
 .question label:hover,
 input:hover::placeholder {
@@ -147,7 +148,7 @@ input:hover::placeholder {
     margin: 10px 0;
 }
 
-.item span {
+.item label span {
     color: red;
 }
 
@@ -163,7 +164,7 @@ input:hover::placeholder {
     flex-wrap: wrap;
 }
 
-.colums div {
+.colums > div {
     width: 48%;
 }
 
@@ -171,14 +172,14 @@ input[type="date"]::-webkit-inner-spin-button {
     display: none;
 }
 
-.item i,
+.item .icon,
 input[type="date"]::-webkit-calendar-picker-indicator {
     position: absolute;
     font-size: 20px;
     color: #a3c2c2;
 }
 
-.item i {
+.item .icon {
     right: 1%;
     top: 30px;
     z-index: 1;
@@ -260,6 +261,48 @@ button {
 
 button:hover {
     background: #9ba0a0;
+}
+
+.flex-columns {
+    display: flex;
+    width: 100%;
+}
+
+.flex-columns > * {
+    flex-grow: 2;
+}
+
+.color-selector-container,
+.color-selector-container--select-background,
+.color-selector-container--select-textcolor {
+    position: relative;
+}
+
+.color-selector-container input,
+.color-selector-container--select-background input,
+.color-selector-container--select-textcolor input {
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    cursor: pointer;
+}
+
+.color-selector-container label,
+.color-selector-container--select-background label,
+.color-selector-container--select-textcolor label {
+    text-align: center;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.color-selector-container--select-background label {
+    color: white;
+}
+
+.color-selector-container--select-textcolor label {
+    background-color: white;
 }
 
 @media (min-width: 568px) {

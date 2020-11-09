@@ -8,7 +8,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         try {
             $statement = $connection->stmt_init();
             try {
-                if (!$statement->prepare('SELECT id FROM restaurants WHERE `email` = ?;')) {
+                if (!$statement->prepare('SELECT id, password FROM restaurants WHERE `email` = ?;')) {
                     throw new Exception($statement->error);
                 }
 
@@ -25,10 +25,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $loginError = "Benutzername oder Passwort sind falsch.";
                 }
 
-                //TODO: Passwort überprüfen
-
-                $statement->bind_result($restaurantId);
+                $statement->bind_result($restaurantId, $hashedPassword);
                 $statement->fetch();
+
+                if (!password_verify($_POST['password'], $hashedPassword)) {
+                    $loginError = "Benutzername oder Passwort sind falsch.";
+                }
 
                 if (!isset($loginError)) {
                     $_SESSION['restaurantId'] = $restaurantId;
@@ -47,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 <!DOCTYPE html>
-<html>
+<html lang="de">
 
 <head>
     <title>Online-Check-In Login</title>
@@ -61,6 +63,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <body>
 <div class="testbox">
     <form action="login.php" method="post">
+        <nav>
+            <ul>
+                <li><a href="/admin/registration/">Registrieren</a></li>
+                <li><a href="/admin/login.php">Login</a></li>
+            </ul>
+        </nav>
         <div class="banner">
             <h1>Login</h1>
         </div>

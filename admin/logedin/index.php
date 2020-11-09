@@ -69,7 +69,10 @@ try {
 
 <head>
     <meta charset="UTF-8">
-    <title>Title of the document</title>
+    <title>Online-Check-In Design</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+          integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="stylesheet" href="../administration.css">
     <style>
         #wrap {
@@ -129,20 +132,26 @@ try {
                 </div>
             </div>
             <div class="item">
-                <label for="title-color">Titel Farbe</label>
-                <input type="color" id="title-color" name="title-color" value="<?= $titleColor ?>"
-                       style="width:50px; height:50px"/>
-
-                <label for="icon-color">Icon Farbe</label>
-                <input type="color" id="icon-color" name="icon-color" value="<?= $iconColor ?>"
-                       style="width:50px; height:50px"/>
-
-                <label for="button-color">Button Farbe</label>
-                <input type="color" id="button-color" name="button-color" value="<?= $buttonColor ?>"
-                       style="width:50px; height:50px"/>
-
                 <label for="logo">Logo:</label>
                 <input type="file" id="logo" name="logo" accept="image/png, image/jpeg"/>
+
+                <label for="colors">Farben:</label>
+                <div id="colors" class="flex-columns">
+                    <div class="color-selector-container--select-textcolor">
+                        <input type="color" id="title-color" name="title-color" value="<?= $titleColor ?>"/>
+                        <label for="title-color" class="input" style="color:<?= $titleColor ?>;">Titel</label>
+                    </div>
+                    <div class="color-selector-container--select-textcolor">
+                        <input type="color" id="icon-color" name="title-color" value="<?= $iconColor ?>"/>
+                        <label for="icon-color" class="input" style="color:<?= $iconColor ?>;"><i
+                                    class="fas fa-user fa-lg"></i> Icon</label>
+                    </div>
+                    <div class="color-selector-container--select-background">
+                        <input type="color" id="button-color" name="button-color" value="<?= $buttonColor ?>"/>
+                        <label for="button-color" class="input"
+                               style="background-color:<?= $buttonColor ?>;">Button</label>
+                    </div>
+                </div>
 
                 <div class="btn-block">
                     <button type="submit" style="float:left">Speichern</button>
@@ -164,18 +173,21 @@ try {
     document.getElementById("button-color").addEventListener("input", changeButtonColor, false);
 
     function changeTitleColor(event) {
+        document.querySelector("#title-color + label").style.color = event.target.value;
         iframe.contentWindow.document.querySelectorAll("h1").forEach(function (p) {
             p.style.color = event.target.value;
         });
     }
 
     function changeIconColor(event) {
+        document.querySelector("#icon-color + label").style.color = event.target.value;
         iframe.contentWindow.document.querySelectorAll(".icon").forEach(function (p) {
             p.style.color = event.target.value;
         });
     }
 
     function changeButtonColor(event) {
+        document.querySelector("#button-color + label").style.backgroundColor = event.target.value;
         iframe.contentWindow.document.querySelectorAll("button").forEach(function (p) {
             p.style.backgroundColor = event.target.value;
         });
