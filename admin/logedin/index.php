@@ -155,7 +155,7 @@ try {
 
         #scaled-frame {
             width: 100%;
-            border: 0px;
+            border: 0;
         }
 
         #scaled-frame {
@@ -303,7 +303,6 @@ try {
         if (['image/png', 'image/jpeg'].includes(file.type)) {
             var reader = new FileReader();
             reader.onloadend = function () {
-                console.log('RESULT', reader.result)
                 iframe.contentWindow.document.getElementById("logo").src = reader.result;
                 iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
 
@@ -315,7 +314,6 @@ try {
                         });
                     });
                 });
-
             };
             reader.readAsDataURL(file);
         } else {

@@ -90,7 +90,8 @@ button {
 }
 
 button:hover {
-    background: rgba(253, 138, 6, 1);
+    /*background: rgba(253, 138, 6, 1);*/
+    filter: brightness(120%);
 }
 
 @media (pointer: coarse) {

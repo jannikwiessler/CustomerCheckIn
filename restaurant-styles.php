@@ -55,7 +55,7 @@ button {
     color: #fff;
 }
 
-button:hover {
+/*button:hover {
     background: rgba(253, 138, 6, 1);
 }
-
+*/
