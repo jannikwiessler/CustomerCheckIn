@@ -39,7 +39,7 @@
 
             $statement = $connection->stmt_init();
             try{
-                if (!$statement->prepare('SELECT first_name FROM customers WHERE id=?;')) {
+                if (!$statement->prepare('SELECT first_name, checkout_time FROM customers WHERE id=?;')) {
                     throw new Exception($statement->error);
                 }
                 $statement->bind_param('i', $_GET['id']);
@@ -50,9 +50,13 @@
                     throw new Exception($statement->error);
                 }
 
-                $statement->bind_result($firstName);
-
+                $statement->bind_result($firstName, $checkoutTime);
                 $statement->fetch();
+
+                if ($checkoutTime != null) {
+                    header('Location: index.php');
+                    throw new Exception("Benutzer bereits ausgecheckt.");
+                }
             } finally {
                 $statement->close();
             }

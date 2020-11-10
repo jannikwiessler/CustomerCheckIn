@@ -270,31 +270,39 @@ button:hover {
 
 .flex-columns > * {
     flex-grow: 2;
+    margin: 3px;
 }
 
 .color-selector-container,
 .color-selector-container--select-background,
 .color-selector-container--select-textcolor {
-    position: relative;
+    display: flex;
+    align-items: stretch;
 }
 
 .color-selector-container input,
 .color-selector-container--select-background input,
 .color-selector-container--select-textcolor input {
-    opacity: 0;
-    position: absolute;
-    left: 0;
-    top: 0;
     cursor: pointer;
+    border-radius: 3px 0 0 3px;
+    border-right: none;
+    background-color: white;
+    height: auto;
+    width: 2.5em;
 }
 
 .color-selector-container label,
 .color-selector-container--select-background label,
 .color-selector-container--select-textcolor label {
+    flex-grow: 2;
     text-align: center;
     font-size: 1.2em;
     font-weight: bold;
     cursor: pointer;
+    border: 1px solid #ccc;
+    border-left: none;
+    border-radius: 0 3px 3px 0;
+    padding: 5px;
 }
 
 .color-selector-container--select-background label {
@@ -303,6 +311,35 @@ button:hover {
 
 .color-selector-container--select-textcolor label {
     background-color: white;
+}
+
+.color-selector-container:hover input,
+.color-selector-container--select-background:hover input,
+.color-selector-container--select-textcolor:hover input,
+.color-selector-container:hover label,
+.color-selector-container--select-background:hover label,
+.color-selector-container--select-textcolor:hover label {
+    border: 1px solid transparent;
+    box-shadow: 0 0 3px 0 #669999;
+    color: #669999;
+}
+
+.color-palette {
+
+}
+
+.color-palette button {
+    width: auto;
+    margin: 0;
+    border-radius: 0;
+}
+
+.color-palette button:first-of-type {
+    border-radius: 5px 0 0 5px;
+}
+
+.color-palette button:last-of-type {
+    border-radius: 0 5px 5px 0;
 }
 
 @media (min-width: 568px) {
