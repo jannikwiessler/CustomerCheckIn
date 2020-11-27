@@ -1,12 +1,13 @@
 <?php
 session_start();
-include('../../config.php');
 
 try {
     if (!isset($_SESSION['restaurantId'])) {
         header('Location: /admin/login.php');
         exit;
     }
+
+    include('../../config.php');
 
     $restaurantId = $_SESSION['restaurantId'];
 
@@ -96,7 +97,7 @@ try {
 
         $statement = $connection->stmt_init();
         try {
-            if (!$statement->prepare('SELECT `domain`, logo_url, title_color, icon_color, button_color FROM restaurants WHERE id = ?;')) {
+            if (!$statement->prepare('SELECT restaurant_name, `domain`, logo_url, title_color, icon_color, button_color FROM restaurants WHERE id = ?;')) {
                 throw new Exception($statement->error);
             }
 
@@ -113,7 +114,7 @@ try {
                 header('Location: /admin/registration/');
             }
 
-            $statement->bind_result($domain, $logoUrl, $titleColor, $iconColor, $buttonColor);
+            $statement->bind_result($restaurantName, $domain, $logoUrl, $titleColor, $iconColor, $buttonColor);
             $statement->fetch();
 
             $logoUrl = '../../' . $logoUrl;
@@ -145,134 +146,127 @@ try {
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
           integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     <link rel="stylesheet" href="../administration.css">
-    <style>
-        .wrap {
-            width: 100%;
-            height: 100%;
-            padding: 0;
-            overflow: hidden;
-        }
-
-        #scaled-frame {
-            width: 100%;
-            border: 0;
-        }
-
-        #scaled-frame {
-            zoom: 0.75;
-            -moz-transform: scale(0.75);
-            -moz-transform-origin: 0 0;
-            -o-transform: scale(0.75);
-            -o-transform-origin: 0 0;
-            -webkit-transform: scale(0.75);
-            -webkit-transform-origin: 0 0;
-        }
-
-        @media screen and (-webkit-min-device-pixel-ratio: 0) {
-            #scaled-frame {
-                zoom: 1;
-            }
-        }
-    </style>
 </head>
 
 <body>
-<div class="testbox">
-    <form action="index.php" method="post" enctype="multipart/form-data">
+<div class="ui-outer-container">
+    <div class="ui-inner-container">
         <nav>
+            <h1><?= htmlentities($restaurantName) ?></h1>
+            <hr/>
             <ul>
+                <li><a href="index.php">Dashboard</a></li>
                 <li><a href="index.php">Design</a></li>
                 <li><a href="export.php">Export</a></li>
-                <li><a href="logout.php">Logout</a></li>
             </ul>
+            <hr/>
+            <a class="button" style="width:auto;" href="logout.php">Logout</a>
         </nav>
-        <div class="banner">
-            <h1>Design</h1>
-        </div>
-        <br/>
-        <p>The HELP Group is seeking volunteers to serve our community. Fill in the information below to indicate
-            how you would like to become involved.</p>
-        <br/>
-
-        <div class="colums">
-            <div class="wrap">
-                <div style="margin: auto; width: 80%">
-                    <iframe src="../../index.php?domain=<?= urlencode($domain) ?>" id="scaled-frame" name="quicklook">
-                        <p>Ihr Browser kann leider keine eingebetteten Frames anzeigen. Hier stände eine Live-Vorschau
-                            der Check-In-Seite.</p>
-                    </iframe>
-                </div>
+        <div class="ui-content">
+            <div class="banner">
+                <h1>Design</h1>
             </div>
-            <div class="item">
-                <label for="logo">Logo:</label>
-                <input type="file" id="logo" name="logo" accept="image/png, image/jpeg"/>
-                <?php
-                if (isset($fileError)) {
-                    echo '<p style="color:red;">' . $fileError . '</p>';
-                }
-                ?>
 
-                <label for="colors">Farben:</label>
-                <div id="colors" class="flex-columns">
-                    <div>
-                        <div class="color-selector-container--select-textcolor">
-                            <input type="color" id="title-color" name="title-color" value="<?= $titleColor ?>"/>
-                            <label for="title-color" class="input" style="color:<?= $titleColor ?>;">Titel</label>
-                        </div>
-                        <div class="flex-columns color-palette" data-input-id="title-color">
-                            <button type="button" data-color="Vibrant"></button>
-                            <button type="button" data-color="Muted"></button>
-                            <button type="button" data-color="DarkVibrant"></button>
-                            <button type="button" data-color="DarkMuted"></button>
-                            <button type="button" data-color="LightVibrant"></button>
-                            <button type="button" data-color="LightMuted"></button>
-                        </div>
+            <div class="flex-columns">
+                <div class="wrap box">
+                    <div style="margin: auto; width: 100%">
+                        <iframe src="../../index.php?domain=<?= urlencode($domain) ?>" id="scaled-frame"
+                                name="quicklook">
+                            <p>Ihr Browser kann leider keine eingebetteten Frames anzeigen. Hier stände eine
+                                Live-Vorschau
+                                der Check-In-Seite.</p>
+                        </iframe>
                     </div>
-                    <div>
-                        <div class="color-selector-container--select-textcolor">
-                            <input type="color" id="icon-color" name="icon-color" value="<?= $iconColor ?>"/>
-                            <label for="icon-color" style="color:<?= $iconColor ?>;"><i class="fas fa-user fa-lg"></i>
-                                Icon</label>
-                        </div>
-                        <div class="flex-columns color-palette" data-input-id="icon-color">
-                            <button type="button" data-color="Vibrant"></button>
-                            <button type="button" data-color="Muted"></button>
-                            <button type="button" data-color="DarkVibrant"></button>
-                            <button type="button" data-color="DarkMuted"></button>
-                            <button type="button" data-color="LightVibrant"></button>
-                            <button type="button" data-color="LightMuted"></button>
-                        </div>
-                    </div>
-                    <div>
-                        <div class="color-selector-container--select-background">
-                            <input type="color" id="button-color" name="button-color" value="<?= $buttonColor ?>"/>
-                            <label for="button-color" style="background-color:<?= $buttonColor ?>;">Button</label>
-                        </div>
-                        <div class="flex-columns color-palette" data-input-id="button-color">
-                            <button type="button" data-color="Vibrant"></button>
-                            <button type="button" data-color="Muted"></button>
-                            <button type="button" data-color="DarkVibrant"></button>
-                            <button type="button" data-color="DarkMuted"></button>
-                            <button type="button" data-color="LightVibrant"></button>
-                            <button type="button" data-color="LightMuted"></button>
-                        </div>
-                    </div>
+                    <div class="click-blocker"></div>
                 </div>
+                <form class="box" action="index.php" method="post" enctype="multipart/form-data">
+                    <div class="flex-rows" style="justify-content: space-evenly">
+                        <div class="item">
+                            <label for="logo">Logo:</label>
+                            <input type="file" id="logo" name="logo" accept="image/png, image/jpeg"/>
+                            <?php
+                            if (isset($fileError)) {
+                                echo '<p style="color:red;">' . $fileError . '</p>';
+                            }
+                            ?>
+                        </div>
 
-                <div class="btn-block">
-                    <button type="submit" style="float:left">Speichern</button>
-                </div>
+                        <div style="flex-basis: 40%;">
+                            <label for="colors">Farben:</label>
+                            <div id="colors" class="flex-rows" style="height: 100%; justify-content: space-between">
+                                <div>
+                                    <div class="color-selector-container--select-textcolor">
+                                        <input type="color" id="title-color" name="title-color"
+                                               value="<?= $titleColor ?>"/>
+                                        <label for="title-color" class="input"
+                                               style="color:<?= $titleColor ?>;">Titel</label>
+                                    </div>
+                                    <div class="flex-columns color-palette" data-input-id="title-color">
+                                        <button type="button" data-color="Vibrant"></button>
+                                        <button type="button" data-color="Muted"></button>
+                                        <button type="button" data-color="DarkVibrant"></button>
+                                        <button type="button" data-color="DarkMuted"></button>
+                                        <button type="button" data-color="LightVibrant"></button>
+                                        <button type="button" data-color="LightMuted"></button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="color-selector-container--select-textcolor">
+                                        <input type="color" id="icon-color" name="icon-color"
+                                               value="<?= $iconColor ?>"/>
+                                        <label for="icon-color" style="color:<?= $iconColor ?>;"><i
+                                                    class="fas fa-user fa-lg"></i>
+                                            Icon</label>
+                                    </div>
+                                    <div class="flex-columns color-palette" data-input-id="icon-color">
+                                        <button type="button" data-color="Vibrant"></button>
+                                        <button type="button" data-color="Muted"></button>
+                                        <button type="button" data-color="DarkVibrant"></button>
+                                        <button type="button" data-color="DarkMuted"></button>
+                                        <button type="button" data-color="LightVibrant"></button>
+                                        <button type="button" data-color="LightMuted"></button>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="color-selector-container--select-background">
+                                        <input type="color" id="button-color" name="button-color"
+                                               value="<?= $buttonColor ?>"/>
+                                        <label for="button-color"
+                                               style="background-color:<?= $buttonColor ?>;">Button</label>
+                                    </div>
+                                    <div class="flex-columns color-palette" data-input-id="button-color">
+                                        <button type="button" data-color="Vibrant"></button>
+                                        <button type="button" data-color="Muted"></button>
+                                        <button type="button" data-color="DarkVibrant"></button>
+                                        <button type="button" data-color="DarkMuted"></button>
+                                        <button type="button" data-color="LightVibrant"></button>
+                                        <button type="button" data-color="LightMuted"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
+                        <div class="btn-block">
+                            <button type="submit" style="float:left">Speichern</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
             </div>
         </div>
-
-    </form>
 </div>
 <script type="text/javascript" src="/node_modules/node-vibrant/dist/vibrant.min.js"></script>
 <script type="text/javascript">
     var iframe = document.getElementById("scaled-frame");
+    iframe.addEventListener("click", function () {
+        return false;
+    }, true);
     iframe.onload = function () {
         iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+        iframe.style.width = iframe.contentWindow.document.body.scrollWidth + 'px'
+        iframe.contentWindow.document.querySelector('.secondlayer').style.overflow = 'hidden';
+        iframe.parentElement.style.height = (iframe.contentWindow.document.body.scrollHeight * 0.75) + 'px'
+        iframe.parentElement.style.width = (iframe.contentWindow.document.body.scrollWidth * 0.75) + 'px'
     };
 
     window.onload = function () {

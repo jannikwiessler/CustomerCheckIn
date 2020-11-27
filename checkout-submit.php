@@ -65,7 +65,7 @@ header("refresh:4;" . $website);  //4 sind die sek
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <title><?= $restaurantName ?></title>
+    <title><?= htmlentities($restaurantName) ?></title>
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
@@ -78,7 +78,7 @@ header("refresh:4;" . $website);  //4 sind die sek
 
     <div class="main-block">
         <div class="align-center">
-            <img src="<?= $logoUrl ?>" id="logo" alt="<?= $restaurantName ?>"/>
+            <img src="<?= $logoUrl ?>" id="logo" alt="<?= htmlspecialchars($restaurantName) ?>"/>
         </div>
         <br/>
         <h1>Check-Out</h1>

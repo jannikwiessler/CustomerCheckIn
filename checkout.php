@@ -74,7 +74,7 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <title><?= $restaurantName ?></title>
+    <title><?= htmlentities($restaurantName) ?></title>
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
@@ -86,7 +86,7 @@
 
     <div class="main-block">
         <div class="align-center">
-            <img src="<?= $logoUrl ?>" id="logo" alt="<?= $restaurantName ?>"/>
+            <img src="<?= $logoUrl ?>" id="logo" alt="<?= htmlentities($restaurantName) ?>"/>
         </div>
         <br/>
 
@@ -95,8 +95,9 @@
         <form action="checkout-submit.php" method="post">
 
             <div class="btn-block">
-                <p>Herzlich Willkommen, <?=$firstName?> ! <br/>Du hast dich erfolgreich eingecheckt. Bitte lass' diesen Tab ge&ouml;ffnet und checke dich beim Gehen wieder aus.</p>
-                <input type="hidden" name="id" value="<?=$_GET['id']?>" />
+                <p>Herzlich Willkommen, <?= htmlentities($firstName) ?> ! <br/>Du hast dich erfolgreich eingecheckt.
+                    Bitte lass' diesen Tab ge&ouml;ffnet und checke dich beim Gehen wieder aus.</p>
+                <input type="hidden" name="id" value="<?= htmlspecialchars($_GET['id']) ?>"/>
                 <button type="submit">Check-Out</button>
             </div>
         </form>

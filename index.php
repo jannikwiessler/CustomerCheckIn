@@ -42,20 +42,20 @@ try {
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <title><?= $restaurantName ?></title>
+    <title><?= htmlentities($restaurantName) ?></title>
     <meta charset="UTF-8">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css"
           integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <link rel="stylesheet" href="mystylzz.css">
     <link rel="stylesheet"
-          href="restaurant-styles.php<?= isset($_GET['domain']) ? '?domain=' . $_GET['domain'] : '' ?>">
+          href="restaurant-styles.php<?= isset($_GET['domain']) ? '?domain=' . urlencode($_GET['domain']) : '' ?>">
 </head>
 <body>
 <div class="secondlayer">
     <div class="main-block">
         <div class="align-center">
-            <img src="<?= $logoUrl ?>" id="logo" alt="<?= $restaurantName ?>"/>
+            <img src="<?= $logoUrl ?>" id="logo" alt="<?= htmlentities($restaurantName) ?>"/>
         </div>
         <br/>
         <h1>Check-In</h1>

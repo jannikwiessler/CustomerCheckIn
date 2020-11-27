@@ -61,39 +61,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 </head>
 
 <body>
-<div class="testbox">
-    <form action="login.php" method="post">
+<div class="ui-outer-container">
+    <div class="ui-inner-container">
         <nav>
             <ul>
                 <li><a href="/admin/registration/">Registrieren</a></li>
                 <li><a href="/admin/login.php">Login</a></li>
             </ul>
         </nav>
-        <div class="banner">
-            <h1>Login</h1>
-        </div>
-        <br/>
-        <div class="colums">
-            <div class="item">
-                <label for="email">Email-Adresse (Username)<span>*</span></label>
-                <input id="email" type="text" name="email" value="<?= $_POST['email'] ?>" required/>
+        <div class="ui-content">
+            <div class="banner">
+                <h1>Login</h1>
             </div>
-            <div class="item">
-                <label for="password">Passwort<span></span></label>
-                <input id="password" type="password" name="password"/>
-            </div>
-        </div>
+            <br/>
+            <form action="login.php" method="post">
+                <div class="colums">
+                    <div class="item">
+                        <label for="email">Email-Adresse (Username)<span>*</span></label>
+                        <input id="email" type="text" name="email" value="<?= $_POST['email'] ?>" required/>
+                    </div>
+                    <div class="item">
+                        <label for="password">Passwort<span></span></label>
+                        <input id="password" type="password" name="password"/>
+                    </div>
+                </div>
 
-        <?php
-        if (isset($loginError)) {
-            echo '<p style="color: red;">' . $loginError . '</p>';
-        }
-        ?>
+                <?php
+                if (isset($loginError)) {
+                    echo '<p style="color: red;">' . $loginError . '</p>';
+                }
+                ?>
 
-        <div class="btn-block">
-            <button type="submit">Login</button>
+                <div class="btn-block">
+                    <button type="submit">Login</button>
+                </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 </body>
 

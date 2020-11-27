@@ -1,12 +1,13 @@
 <?php
 try {
     session_start();
-    include('../../config.php');
 
     if (!isset($_SESSION['restaurantId'])) {
         header('Location: /admin/login.php');
         exit;
     }
+
+    include('../../config.php');
 
     $restaurantId = $_SESSION['restaurantId'];
 
