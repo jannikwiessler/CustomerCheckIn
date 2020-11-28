@@ -1,9 +1,6 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
-        session_start();
-        include('../../config.php');
-
         $connection = new mysqli($mysqlServer, $mysqlUser, $mysqlPassword, $mysqlDatabase);
         try {
             /*            if ($_POST['info'] == '1') {
@@ -117,171 +114,146 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 ?>
 
-<!DOCTYPE html>
-<html lang="de">
-
-<head>
-    <title>Online-Check-In registrieren</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
-          integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <link rel="stylesheet" href="../administration.css">
-
-</head>
-
-<body>
-<div class="ui-outer-container">
-    <div class="ui-inner-container">
-        <nav>
-            <ul>
-                <li><a href="/admin/registration/">Registrieren</a></li>
-                <li><a href="/admin/login.php">Login</a></li>
-            </ul>
-        </nav>
-        <div class="ui-content">
-            <div class="banner">
-                <h1>Online-Check-In registrieren</h1>
-            </div>
-            <br/>
-            <p>TestText TestText TestText TestText TestText TestText TestText TestText TestText TestText TestText
-                TestText
-                TestText TestText TestText TestText TestText TestText TestText TestText TestText TestText TestText
-                TestText
-                TestText TestText TestText TestText TestText TestText TestText TestText TestText TestText TestText
-                TestText
-                TestText TestText TestText TestText TestText TestText TestText TestText TestText TestText .</p>
-            <br/>
-            <form action="index.php" method="post">
-                <div class="colums">
-                    <div class="item">
-                        <label for="lastname">Name<span>*</span></label>
-                        <input id="lastname" type="text" name="lastname" value="<?= $_POST['lastname'] ?>" required/>
-                    </div>
-                    <div class="item">
-                        <label for="firstname">Vorname<span>*</span></label>
-                        <input id="firstname" type="text" name="firstname" value="<?= $_POST['firstname'] ?>" required/>
-                    </div>
-                    <div class="item">
-                        <label for="restaurantname">Restaurant-Name<span>*</span></label>
-                        <input id="restaurantname" type="text" name="restaurantname"
-                               value="<?= $_POST['restaurantname'] ?>"
-                               required/>
-                    </div>
-                    <div class="item">
-                        <label for="email">Email-Adresse (Username)<span>*</span></label>
-                        <input id="email" type="text" name="email" value="<?= $_POST['email'] ?>" required/>
-                        <?php
-                        if (isset($errors['email'])) {
-                            echo '<p style="color:red;">' . $errors['email'] . '</p>';
-                        }
-                        ?>
-                    </div>
-                    <div class="item">
-                        <label for="password">Passwort<span>*</span></label>
-                        <input id="password" type="password" name="password" required/>
-                    </div>
-                    <div class="item">
-                        <label for="password2">Passwort wiederholen<span>*</span></label>
-                        <input id="password2" type="password" name="password2" required/>
-                    </div>
-                    <?php
-                    if (isset($errors['password'])) {
-                        echo '<p style="color:red;flex-grow:2;width:100%">' . $errors['password'] . '</p>';
-                    }
-                    ?>
-                    <div class="item">
-                        <label for="phone">Telefon</label>
-                        <input id="phone" type="tel" name="phone" value="<?= $_POST['phone'] ?>"/>
-                    </div>
-                    <div class="item">
-                        <label for="street">Straße<span>*</span></label>
-                        <input id="street" type="text" name="street" value="<?= $_POST['street'] ?>" required/>
-                    </div>
-                    <div class="item">
-                        <label for="zip">Postleitzahl<span>*</span></label>
-                        <input id="zip" type="text" name="zip" value="<?= $_POST['zip'] ?>" required/>
-                    </div>
-                    <div class="item">
-                        <label for="city">Stadt<span>*</span></label>
-                        <input id="city" type="text" name="city" value="<?= $_POST['city'] ?>" required/>
-                    </div>
-                    <div class="item">
-                        <label for="website">Website<span></span></label>
-                        <input id="website" type="text" name="website" value="<?= $_POST['website'] ?>"/>
-                    </div>
-                    <div class="item">
-                        <label for="subdomain">Wunsch Domain</label>
-                        <div style="display: flex;width:100%;align-items: center;">
-                            <input id="subdomain" type="text" name="subdomain" value="<?= $_POST['subdomain'] ?>"
-                                   placeholder="my-restaurant-name" style="flex-grow: 2;"/>
-                            <span>.<?= $_SERVER['SERVER_NAME'] ?></span>
-                        </div>
-
-                        <?php
-                        if (isset($errors['domain'])) {
-                            echo '<p style="color: red;">' . $errors['domain'] . '</p>';
-                        }
-                        ?>
-                    </div>
-                </div>
-                <!--        <div class="question">
-            <label>Ich habe eine eigene Domain.</label>
-            <div class="question-answer">
-                <div>
-                    <input type="radio" value="1" id="radio_1"
-                           name="info" <? /*= $_POST['info'] == 1 ? 'checked="checked"' : '' */ ?>
-                           onchange="domainCheckBoxChanged(this)"/>
-                    <label for="radio_1" class="radio"><span>Ja</span></label>
-                </div>
-                <div>
-                    <input type="radio" value="2" id="radio_2"
-                           name="info" <? /*= $_POST['info'] == 2 ? 'checked="checked"' : '' */ ?>
-                           onchange="domainCheckBoxChanged(this)"
-                           checked="checked" />
-                    <label for="radio_2" class="radio"><span>Nein</span></label>
-                </div>
-            </div>
-            <div class="item">
-                <label for="domain">Domain</label>
-                <input id="domain" type="text" name="domain" value="<? /*= $_POST['domain'] */ ?>"
-                       placeholder="checkin.my-restaurant-name.de"
-                       disabled="disabled" />
-            </div>
-           <div class="item">
-                <label for="subdomain">Wunsch Domain</label>
-                <input id="subdomain" type="text" name="subdomain" value="<?= $_POST['subdomain'] ?>"
-                       placeholder="my-restaurant-name"/>.checkin.de
-            </div>
+<div class="banner">
+    <h1>Online-Check-In registrieren</h1>
+</div>
+<br/>
+<p>TestText TestText TestText TestText TestText TestText TestText TestText TestText TestText TestText
+    TestText
+    TestText TestText TestText TestText TestText TestText TestText TestText TestText TestText TestText
+    TestText
+    TestText TestText TestText TestText TestText TestText TestText TestText TestText TestText TestText
+    TestText
+    TestText TestText TestText TestText TestText TestText TestText TestText TestText TestText .</p>
+<br/>
+<form action="index.php" method="post">
+    <div class="colums">
+        <div class="item">
+            <label for="lastname">Name<span>*</span></label>
+            <input id="lastname" type="text" name="lastname" value="<?= $_POST['lastname'] ?>" required/>
+        </div>
+        <div class="item">
+            <label for="firstname">Vorname<span>*</span></label>
+            <input id="firstname" type="text" name="firstname" value="<?= $_POST['firstname'] ?>" required/>
+        </div>
+        <div class="item">
+            <label for="restaurantname">Restaurant-Name<span>*</span></label>
+            <input id="restaurantname" type="text" name="restaurantname"
+                   value="<?= $_POST['restaurantname'] ?>"
+                   required/>
+        </div>
+        <div class="item">
+            <label for="email">Email-Adresse (Username)<span>*</span></label>
+            <input id="email" type="text" name="email" value="<?= $_POST['email'] ?>" required/>
             <?php
-                if (isset($errors['domain'])) {
-                    echo '<p style="color: red;">' . $errors['domain'] . '</p>';
-                }
-                ?>
-        </div>-->
+            if (isset($errors['email'])) {
+                echo '<p style="color:red;">' . $errors['email'] . '</p>';
+            }
+            ?>
+        </div>
+        <div class="item">
+            <label for="password">Passwort<span>*</span></label>
+            <input id="password" type="password" name="password" required/>
+        </div>
+        <div class="item">
+            <label for="password2">Passwort wiederholen<span>*</span></label>
+            <input id="password2" type="password" name="password2" required/>
+        </div>
+        <?php
+        if (isset($errors['password'])) {
+            echo '<p style="color:red;flex-grow:2;width:100%">' . $errors['password'] . '</p>';
+        }
+        ?>
+        <div class="item">
+            <label for="phone">Telefon</label>
+            <input id="phone" type="tel" name="phone" value="<?= $_POST['phone'] ?>"/>
+        </div>
+        <div class="item">
+            <label for="street">Straße<span>*</span></label>
+            <input id="street" type="text" name="street" value="<?= $_POST['street'] ?>" required/>
+        </div>
+        <div class="item">
+            <label for="zip">Postleitzahl<span>*</span></label>
+            <input id="zip" type="text" name="zip" value="<?= $_POST['zip'] ?>" required/>
+        </div>
+        <div class="item">
+            <label for="city">Stadt<span>*</span></label>
+            <input id="city" type="text" name="city" value="<?= $_POST['city'] ?>" required/>
+        </div>
+        <div class="item">
+            <label for="website">Website<span></span></label>
+            <input id="website" type="text" name="website" value="<?= $_POST['website'] ?>"/>
+        </div>
+        <div class="item">
+            <label for="subdomain">Wunsch Domain</label>
+            <div style="display: flex;width:100%;align-items: center;">
+                <input id="subdomain" type="text" name="subdomain" value="<?= $_POST['subdomain'] ?>"
+                       placeholder="my-restaurant-name" style="flex-grow: 2;"/>
+                <span>.<?= $_SERVER['SERVER_NAME'] ?></span>
+            </div>
 
-                <!-- <div class="item">
-              <p>Meal Preference</p>
-              <select>
-                <option selected value="" disabled selected></option>
-                <option value="b" >Beef</option>
-                <option value="ch">Chicken</option>
-                <option value="v">Vegetarian</option>
-                <option value="n">None</option>
-              </select>
-            </div> -->
-                <!--            <div class="item">
-                                <label for="visit">Anmerkungen</label>
-                                <textarea id="visit" rows="3"></textarea>
-                            </div>
-                -->
-                <div class="btn-block">
-                    <button type="submit">Submit</button>
-                </div>
-            </form>
+            <?php
+            if (isset($errors['domain'])) {
+                echo '<p style="color: red;">' . $errors['domain'] . '</p>';
+            }
+            ?>
         </div>
     </div>
+    <!--        <div class="question">
+<label>Ich habe eine eigene Domain.</label>
+<div class="question-answer">
+    <div>
+        <input type="radio" value="1" id="radio_1"
+               name="info" <? /*= $_POST['info'] == 1 ? 'checked="checked"' : '' */ ?>
+               onchange="domainCheckBoxChanged(this)"/>
+        <label for="radio_1" class="radio"><span>Ja</span></label>
+    </div>
+    <div>
+        <input type="radio" value="2" id="radio_2"
+               name="info" <? /*= $_POST['info'] == 2 ? 'checked="checked"' : '' */ ?>
+               onchange="domainCheckBoxChanged(this)"
+               checked="checked" />
+        <label for="radio_2" class="radio"><span>Nein</span></label>
+    </div>
 </div>
-<script type="text/javascript">
+<div class="item">
+    <label for="domain">Domain</label>
+    <input id="domain" type="text" name="domain" value="<? /*= $_POST['domain'] */ ?>"
+           placeholder="checkin.my-restaurant-name.de"
+           disabled="disabled" />
+</div>
+<div class="item">
+    <label for="subdomain">Wunsch Domain</label>
+    <input id="subdomain" type="text" name="subdomain" value="<?= $_POST['subdomain'] ?>"
+           placeholder="my-restaurant-name"/>.checkin.de
+</div>
+<?php
+    if (isset($errors['domain'])) {
+        echo '<p style="color: red;">' . $errors['domain'] . '</p>';
+    }
+    ?>
+</div>-->
+
+    <!-- <div class="item">
+  <p>Meal Preference</p>
+  <select>
+    <option selected value="" disabled selected></option>
+    <option value="b" >Beef</option>
+    <option value="ch">Chicken</option>
+    <option value="v">Vegetarian</option>
+    <option value="n">None</option>
+  </select>
+</div> -->
+    <!--            <div class="item">
+                    <label for="visit">Anmerkungen</label>
+                    <textarea id="visit" rows="3"></textarea>
+                </div>
+    -->
+    <div class="btn-block">
+        <button type="submit">Submit</button>
+    </div>
+</form>
+<!--<script type="text/javascript">
     function domainCheckBoxChanged(checkbox) {
         if (checkbox.value === "1") {
             document.getElementById('domain').disabled = false;
@@ -294,6 +266,4 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
     }
 </script>
-</body>
-
-</html>
+-->

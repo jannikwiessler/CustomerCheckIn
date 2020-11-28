@@ -1,9 +1,6 @@
 <?php
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
-        session_start();
-        include('../config.php');
-
         $connection = new mysqli($mysqlServer, $mysqlUser, $mysqlPassword, $mysqlDatabase);
         try {
             $statement = $connection->stmt_init();
@@ -48,57 +45,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 ?>
-<!DOCTYPE html>
-<html lang="de">
-
-<head>
-    <title>Online-Check-In Login</title>
-    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
-          integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <link rel="stylesheet" href="administration.css">
-
-</head>
-
-<body>
-<div class="ui-outer-container">
-    <div class="ui-inner-container">
-        <nav>
-            <ul>
-                <li><a href="/admin/registration/">Registrieren</a></li>
-                <li><a href="/admin/login.php">Login</a></li>
-            </ul>
-        </nav>
-        <div class="ui-content">
-            <div class="banner">
-                <h1>Login</h1>
-            </div>
-            <br/>
-            <form action="login.php" method="post">
-                <div class="colums">
-                    <div class="item">
-                        <label for="email">Email-Adresse (Username)<span>*</span></label>
-                        <input id="email" type="text" name="email" value="<?= $_POST['email'] ?>" required/>
-                    </div>
-                    <div class="item">
-                        <label for="password">Passwort<span></span></label>
-                        <input id="password" type="password" name="password"/>
-                    </div>
-                </div>
-
-                <?php
-                if (isset($loginError)) {
-                    echo '<p style="color: red;">' . $loginError . '</p>';
-                }
-                ?>
-
-                <div class="btn-block">
-                    <button type="submit">Login</button>
-                </div>
-            </form>
+<div class="banner">
+    <h1>Login</h1>
+</div>
+<br/>
+<form action="login.php" method="post">
+    <div class="colums">
+        <div class="item">
+            <label for="email">Email-Adresse (Username)<span>*</span></label>
+            <input id="email" type="text" name="email" value="<?= $_POST['email'] ?>" required/>
+        </div>
+        <div class="item">
+            <label for="password">Passwort<span></span></label>
+            <input id="password" type="password" name="password"/>
         </div>
     </div>
-</div>
-</body>
 
-</html>
+    <?php
+    if (isset($loginError)) {
+        echo '<p style="color: red;">' . $loginError . '</p>';
+    }
+    ?>
+
+    <div class="btn-block">
+        <button type="submit">Login</button>
+    </div>
+</form>

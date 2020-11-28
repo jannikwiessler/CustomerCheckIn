@@ -23,6 +23,7 @@ p {
 
 .ui-outer-container {
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: stretch;
     height: inherit;

@@ -1,0 +1,7 @@
+AddDefaultCharset UTF-8
+Options +FollowSymlinks
+RewriteEngine on
+
+RewriteRule ^$ layout.php?content=index.php&nav=nav.html&rule=1 [NC,QSA,L,END]
+RewriteRule ^(logedin/.*)$ layout.php?content=$1&nav=logedin/nav.html&rule=2 [NC,QSA,L,END]
+RewriteRule ^(.+)$ layout.php?content=$1&nav=nav.html&rule=3 [NC,QSA,L,END]
