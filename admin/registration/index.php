@@ -11,27 +11,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $errors = [];
 
-            $statement = $connection->stmt_init();
-            try {
-                if (!$statement->prepare('SELECT id FROM restaurants WHERE `domain` = ?;')) {
-                    throw new Exception($statement->error);
+            if (in_array($domain, ['www', 'mail'])) {
+                $errors['domain'] = "Die Domain ist bereits registriert.";
+            } else {
+                $statement = $connection->stmt_init();
+                try {
+                    if (!$statement->prepare('SELECT id FROM restaurants WHERE `domain` = ?;')) {
+                        throw new Exception($statement->error);
+                    }
+
+                    $statement->bind_param('s', $domain);
+                    $statement->execute();
+
+                    if ($statement->errno) {
+                        throw new Exception($statement->error);
+                    }
+
+                    $statement->store_result();
+
+                    if ($statement->num_rows > 0) {
+                        $errors['domain'] = "Die Domain ist bereits registriert.";
+                    }
+                } finally {
+                    $statement->close();
                 }
-
-                $statement->bind_param('s', $domain);
-                $statement->execute();
-
-                if ($statement->errno) {
-                    throw new Exception($statement->error);
-                }
-
-                $statement->store_result();
-
-                if ($statement->num_rows > 0) {
-                    $errors['domain'] = "Die Domain ist bereits registriert.";
-                }
-            } finally {
-                $statement->close();
             }
+
 
             $statement = $connection->stmt_init();
             try {
