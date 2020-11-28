@@ -69,6 +69,8 @@ try {
                         if ($statement->errno) {
                             throw new Exception($statement->error);
                         }
+
+                        $logoUrl = '../../' . $newPath;
                     } finally {
                         $statement->close();
                     }
@@ -91,16 +93,15 @@ try {
                     $statement->close();
                 }
             }
+
+            $titleColor = $_POST['title-color'];
+            $iconColor = $_POST['icon-color'];
+            $buttonColor = $_POST['button-color'];
         }
     } finally {
         $connection->close();
     }
 
-    if (isset($fileError)) {
-        $titleColor = $_POST['title-color'];
-        $iconColor = $_POST['icon-color'];
-        $buttonColor = $_POST['button-color'];
-    }
 } catch (Exception $ex) {
     echo $ex->getMessage();
     exit();
