@@ -50,7 +50,9 @@ try {
                 $statement->bind_result($restaurantName, $domain, $logoUrl, $titleColor, $iconColor, $buttonColor);
                 $statement->fetch();
 
-                $logoUrl = '../../' . $logoUrl;
+                if ($logoUrl) {
+                    $logoUrl = '../../' . $logoUrl;
+                }
             } finally {
                 $statement->close();
             }

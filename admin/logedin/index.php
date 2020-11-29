@@ -42,16 +42,16 @@ try {
                 $newPath = $uploadFolder . $filename . '.' . $extension;
 
                 //Neuer Dateiname falls die Datei bereits existiert
-                if (file_exists('../../' . $newPath)) { //Falls Datei existiert, hänge eine Zahl an den Dateinamen
+                if (file_exists(__DIR__ . '/../../' . $newPath)) { //Falls Datei existiert, hänge eine Zahl an den Dateinamen
                     $id = 1;
                     do {
                         $newPath = $uploadFolder . $filename . '_' . $id . '.' . $extension;
                         $id++;
-                    } while (file_exists('../../' . $newPath));
+                    } while (file_exists(__DIR__ . '/../../' . $newPath));
                 }
 
                 //Alles okay, verschiebe Datei an neuen Pfad
-                if (!move_uploaded_file($_FILES['logo']['tmp_name'], '../../' . $newPath)) {
+                if (!move_uploaded_file($_FILES['logo']['tmp_name'], __DIR__ . '/../../' . $newPath)) {
                     $fileError = "Datei wurde nicht hochgeladen";
                 }
 
@@ -210,6 +210,8 @@ try {
         iframe.parentElement.style.width = (iframe.contentWindow.document.body.scrollWidth * 0.75) + 'px'
     };
 
+    var colorPaletteInitialized = false;
+
     window.onload = function () {
         document.getElementById("logo").addEventListener("change", changeLogo, false);
 
@@ -217,20 +219,13 @@ try {
         document.getElementById("icon-color").addEventListener("input", updateIconColor, false);
         document.getElementById("button-color").addEventListener("input", updateButtonColor, false);
 
-        Vibrant.from('<?=$logoUrl?>').getPalette(function (err, palette) {
+        if ('<?=$logoUrl?>') {
+            Vibrant.from('<?=$logoUrl?>').getPalette(updateColorPalette);
+        } else {
             document.querySelectorAll('.color-palette').forEach(function (colorPalette) {
-                colorPalette.querySelectorAll('button').forEach(function (button) {
-                    button.style.backgroundColor = palette[button.dataset.color].hex;
-                    button.value = palette[button.dataset.color].hex;
-                    button.addEventListener("click", function () {
-                        document.getElementById(colorPalette.dataset.inputId).value = button.value;
-                        updateTitleColor();
-                        updateIconColor();
-                        updateButtonColor();
-                    }, false);
-                });
-            });
-        });
+                colorPalette.style.display = 'none';
+            })
+        }
     };
 
     function changeLogo(event) {
@@ -241,19 +236,33 @@ try {
                 iframe.contentWindow.document.getElementById("logo").src = reader.result;
                 iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
 
-                Vibrant.from(reader.result).getPalette(function (err, palette) {
-                    document.querySelectorAll('.color-palette').forEach(function (colorPalette) {
-                        colorPalette.querySelectorAll('button').forEach(function (button) {
-                            button.style.backgroundColor = palette[button.dataset.color].hex;
-                            button.value = palette[button.dataset.color].hex;
-                        });
-                    });
-                });
+                Vibrant.from(reader.result).getPalette(updateColorPalette);
             };
             reader.readAsDataURL(file);
         } else {
             alert('Datei im falschen Format.');
         }
+    }
+
+    function updateColorPalette(err, palette) {
+        document.querySelectorAll('.color-palette').forEach(function (colorPalette) {
+            colorPalette.querySelectorAll('button').forEach(function (button) {
+                button.style.backgroundColor = palette[button.dataset.color].hex;
+                button.value = palette[button.dataset.color].hex;
+                if (!colorPaletteInitialized) {
+                    button.addEventListener("click", function () {
+                        document.getElementById(colorPalette.dataset.inputId).value = button.value;
+                        updateTitleColor();
+                        updateIconColor();
+                        updateButtonColor();
+                    }, false);
+                }
+            });
+            if (!colorPaletteInitialized) {
+                colorPalette.style.display = null;
+            }
+        });
+        colorPaletteInitialized = true;
     }
 
     function updateTitleColor() {

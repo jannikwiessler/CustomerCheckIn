@@ -11,8 +11,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $errors = [];
 
-            if (in_array($domain, ['www', 'mail'])) {
+            if (in_array($_POST['subdomain'], ['www', 'mail'])) {
                 $errors['domain'] = "Die Domain ist bereits registriert.";
+            } elseif (preg_match('/[^a-z0-9\-]/', $_POST['subdomain'])) {
+                $errors['domain'] = "Die Domain darf nur die Zeichen a-z, 0-9 und - enthalten.";
             } else {
                 $statement = $connection->stmt_init();
                 try {
