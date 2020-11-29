@@ -15,11 +15,11 @@ try {
     try {
         $statement = $connection->stmt_init();
         try {
-            if (!$statement->prepare('SELECT restaurants.restaurant_name, customers.first_name, customers.last_name, customers.checkin_time, customers.checkout_time, customers.email, customers.tel, customers.address, customers.zip_code, customers.city FROM restaurants RIGHT JOIN customers ON customers.restaurant_id = restaurants.id WHERE restaurants.id = ? ORDER BY customers.checkin_time;')) {
+            if (!$statement->prepare('SELECT restaurants.restaurant_name, customers.first_name, customers.last_name, customers.checkin_time, customers.checkout_time, customers.email, customers.tel, customers.address, customers.zip_code, customers.city FROM restaurants RIGHT JOIN customers ON customers.restaurant_id = restaurants.id WHERE restaurants.id = ? AND customers.checkout_time > ? AND customers.checkin_time < ? ORDER BY customers.checkin_time;')) {
                 throw new Exception($statement->error);
             }
 
-            $statement->bind_param('i', $restaurantId);
+            $statement->bind_param('iss', $restaurantId, $_POST['from'], $_POST['to']);
             $statement->execute();
 
             if ($statement->errno) {

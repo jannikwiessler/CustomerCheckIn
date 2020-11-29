@@ -1,0 +1,29 @@
+<div class="banner">
+    <h1>Export</h1>
+</div>
+
+<form action="export.php" method="post">
+    <div class="colums">
+        <div class="item">
+            <label for="from">Von<span>*</span></label>
+            <input id="from" type="date" name="from" required/>
+        </div>
+        <div class="item">
+            <label for="to">Bis<span></span></label>
+            <input id="to" type="date" name="to"/>
+        </div>
+    </div>
+
+    <div class="btn-block">
+        <button type="submit">Export</button>
+    </div>
+</form>
+<script type="text/javascript">
+    window.onload = function () {
+        var now = new Date(Date.now());
+        var from = new Date(Date.now());
+        from.setDate(from.getDate() - 30);
+        document.getElementById('from').valueAsDate = from;
+        document.getElementById('to').valueAsDate = now;
+    }
+</script>
