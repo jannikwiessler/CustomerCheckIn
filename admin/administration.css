@@ -33,7 +33,7 @@ p {
 .ui-inner-container {
     display: flex;
     justify-content: center;
-    height: inherit;
+    height: calc(100vh - 40px);
     border-radius: 6px;
     background-color: #EEE;
     box-shadow: 0 0 8px #669999;
@@ -46,6 +46,7 @@ p {
 
 .ui-content {
     flex-grow: 2;
+    overflow: auto;
 }
 
 .box {
@@ -63,7 +64,7 @@ nav {
     min-width: 250px;
     display: flex;
     flex-direction: column;
-    justify-content: space-evenly;
+    justify-content: space-between;
     align-items: stretch;
 }
 
@@ -96,6 +97,14 @@ nav hr {
     width: 100%;
     border: solid thin #669999;
     box-shadow: 0 0 8px #669999;
+}
+
+.banner {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #EEE;
 }
 
 .banner > h1 {
